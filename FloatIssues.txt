@@ -1,0 +1,48 @@
+#include<stdio.h>
+
+/*
+	关于float，double，long double，对应的printf和scanf的占位符问题
+	以下结论均在vs，c11+下执行
+*/
+
+int main()
+{
+
+	float a;
+	double b;
+	long double c;
+
+	scanf_s("%f", &a);		//首先是float，输入只能使用%f, %lf会出现堆栈损坏的问题
+							//scanf_s("%lf", &a); 禁止！
+
+	scanf_s("%lf", &b);		//然后是double，输入需要使用%lf, %f不会报错，但输出会有问题(随机数)
+							//scanf_s("%f", &a); 禁止！
+
+	scanf_s("%lf", &c);		//最后是long double，有的同学说，既然float是%f，double是%lf,那么long double是%llf
+							//绝对不可以，vs下编译通过，但运行时程序会崩溃，老老实实使用%lf就可以了
+							//scanf_s("%llf", &c); 禁止！
+
+	//输出就比较宽松了，亲测对于float，double，long double三种类型，%f,%lf,%llf,都可以使用
+	//那有的同学会想，%lllf可以吗，也不可以，这在vs下一样是编译通过，运行时程序会崩溃
+	printf("a = %llf\n", a);
+	printf("b = %llf\n", b);
+	printf("c = %llf\n", c);	
+
+	//printf("c = %lllf\n", c); 禁止！
+
+	return 0;
+}
+
+/*
+附加笔记
+
+if(!a--)	先执行!a, 后a--
+
+if(!--a)	先执行--a, 后!a
+
+if(a, b)	语法正确，判断最右边的b
+
+while(1);	死循环
+
+*/
+
