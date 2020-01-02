@@ -1,0 +1,112 @@
+#include<stdio.h>
+int function_1(int* p);
+int function_2(int a, int b, int* result);
+int function_3(int a[], int* b);
+void function_4(const int arr[]);
+
+/* 指针详解 */
+
+int main()
+{
+        int array[10 + 10];                     //正确，因为在编译后10+10就会被传换成20，是一个常量
+        int a[5] = {1,2,3,4,5};
+        int result;
+        int i = 10;
+        int j = 20;
+        int* p = &i;
+
+
+        //左值之所以叫做左值
+        //是因为出现在赋值号左边的不一定是变量，而是一个值，是一个表达式计算的结果
+        //a[0]和*p都是运算得到的一个特殊的值，这个值可以接受一个值，所以叫做左值
+        a[0] = 2;
+        *p = 3;
+
+
+        //指针应用场景
+        //函数返回运算的状态，结果通过指针返回
+        if (function_2(10, 0, &result) == 0)
+                printf("result = %d\n", result);
+        else
+                printf("除数为0!\n");
+
+
+        //指针的常见错误
+        //定义了一个指针变量，还没有指向任何变量，不可以使用
+        int* p_1;
+        *p_1 = 10;
+        //p_1没有得到地址值，不可以使用
+
+
+        //实际上数组变量是const型指针
+//      int b[5]; ==> int *const b;
+//      b = a;          数组变量不可以被修改
+        function_3(a, a);
+
+
+        //指针是const
+        //表示一旦得到了某个变量的地址，不能再指向其他变量
+        int* const p_2 = &i;    //p_2是const
+        *p_2 = 26;                              //OK
+        p_2++;                                  //ERROR,指针的指向不能改变
+
+
+        //所指是const
+        //表示不能通过这个指针去修改那个变量（并不能使得那个变量成为const）
+        const int* p_3 = &i;    //所指是const
+//      int const* p_3 = &i;    //与上式相同
+        *p_3 = 26;                              //ERROR,(*p_3是const)
+        p_3++;                                  //OK
+        p_3 = &j;                               //OK
+
+        //const在*的前面表示，所指不能修改，const在*后面表示指向不能改变
+
+
+        //const数组
+        const int arr[5] = { 1,2,3,4,5 };
+        //数组变量已经是const的指针了，这里的const表示数组的每个单元都是const
+        //这样的数组必须通过初始化来进行赋值
+        //可以通过此操作让函数不修改数组值
+        function_4(arr);
+
+
+        //链表之所以需要返回一个头指针，是因为当链表为空时，新建链表时需要返回头指针
+        //如果链表已经存在，则不需要返回头指针
+        return 0;
+}
+
+int function_1(int* p)
+{
+        printf("p = %p\n", p);
+        printf("*p = %d\n", *p);
+}
+
+int function_2(int a, int b, int* result)
+{
+        if (b == 0)     return-1;
+        *result = a / b;
+        return 0;
+}
+
+int function_3(int a[],int *b)
+{
+        //数组传到函数里，其实传递的是数组的首地址
+        //没有办法用sizeof来求出数组的总长度
+        int length = sizeof(a) / sizeof(a[0]);
+
+        //在函数里修改数组变量，会改变原来的值
+        a[0] = 100;
+
+        //[]可以对指针做
+        b[0] = 1000;
+
+        //*也可以对数组做
+        //其实是改变a[0]的值
+        *a = 20;
+}
+
+void function_4(const int arr[])
+{
+        arr[0] = 10;    //错误写法，const保护了数组里的值
+}
+
