@@ -1,0 +1,6 @@
+1. 头文件: #include<stdlib.h>
+
+2. srand((unsigned)time(NULL));
+
+3. rand();
+
