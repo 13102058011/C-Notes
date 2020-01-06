@@ -1,6 +1,10 @@
-1. 头文件: #include<stdlib.h>
+1. 头文件 
+	#include<stdlib.h>
+	#include<time.h>
 
-2. srand((unsigned)time(NULL));
-
-3. rand();
+2. 为rand函数设置随机种子
+	srand((unsigned)time(NULL));
+	
+3. 获取随机值
+	rand();
 
